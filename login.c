@@ -11,8 +11,10 @@ int main(){
 	char webStr2[200];
 	char fileStr[200];
 	char fileStr2[200];
-	char s[2] = " ";
-	char a[2] = "&";
+	char user[10]; // will preserve key tokens
+	char pass[10];
+	char space[2] = " ";
+	char *delimiters = "&=";
 	
 	int parseLength = atoi(getenv("CONTENT_LENGTH"));
 	FILE *memsIn;
@@ -23,28 +25,55 @@ int main(){
 	char *fToken;
 	char *wToken;
 	int fTokenCounter = 1; //since we bump the token before we enter the loop
-	int wTokenCOunter = 0;
+	int wTokenCounter = 0;
 
 	//first read STDIN input into a string
 	fgets(webStr, parseLength+1, stdin);
 
-	//read Database into a string:
-	fgets(fileStr, 200, memsIn);
-	printf("%s\n", fileStr);
-	strcpy(fileStr2, fileStr);
 
-	//initalise tokens
-	wToken = strtok(webStr, a);
-	fToken = strtok(fileStr, s); //starts at name, key counts will occur at 1 & 2
-	fToken = strtok(NULL, s); // bump token to username
+	//initalise token
+	wToken = strtok(webStr, delimiters);
 	
-	//now walk through POST data
+	
+	//now walk through POST data for username and password
 	 while(wToken != NULL){
-
 	 	printf("%s\n", wToken );
-	 	wToken = strtok(NULL, s);
-	 	fTokenCounter++;
+	 	if(wTokenCounter == 0) //some value to be determined
+	 	{
+	 		strcpy(user, wToken);
+	 	}
+	 	if(wTokenCounter == 1) // another tbd value
+	 	{
+	 		strcpy(pass, wToken);
+	 	}
+	 	wToken = strtok(NULL, space);
+	 	wTokenCounter++;
 	 }
+
+	 //check with Database and generate web pages
+	 while(1){
+	 	//read Database into a string:
+		if(fgets(fileStr, 200, memsIn) == NULL) break;
+		
+		printf("%s\n", fileStr);
+		fToken = strtok(fileStr, space); //starts at name, key counts will occur at 1 & 2
+		fToken = strtok(NULL, space); // bump token to username
+
+		while(fToken != NULL){
+			if(strcmp(user, fToken) == 1){
+				validMem = 1;
+
+			}
+			else if(strcmp(pass, fToken) == 1 && validMem == 1){
+				validPass = 1;
+				break;
+			}
+			else{
+
+			}
+		}
+	 }
+
 
 
 
