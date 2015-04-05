@@ -23,10 +23,11 @@ if($existing == 0){
 	open (LOG, ">>members.csv") || Error('open','file');
 	print LOG "$name $username $password\n";
 	close(LOG);
+	print "Location: ";
 }
 else{
 	print "Error: Username already exists";
-	print "Location: "
+	print "Location: ";
 }
 
 }
