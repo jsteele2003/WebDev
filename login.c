@@ -6,39 +6,49 @@
 
 
 int main(){
+	
 	char webStr[200]; //for storing our input from the browser
+	char webStr2[200];
 	char fileStr[200];
 	char fileStr2[200];
 	char s[2] = " ";
 	char a[2] = "&";
 	
-	int parseLen = atoi(getenv("CONTENT_LENGTH"));
+	int parseLength = atoi(getenv("CONTENT_LENGTH"));
 	FILE *memsIn;
 	memsIn = fopen("members.txt", "r");
 	
 	int validMem = -1;
-	char *token;
-	int tokenCounter = 0;
+	int validPass = - 1;
+	char *fToken;
+	char *wToken;
+	int fTokenCounter = 1; //since we bump the token before we enter the loop
+	int wTokenCOunter = 0;
 
 	//first read STDIN input into a string
-	fgets(webStr, parseLen+1, stdin);
+	fgets(webStr, parseLength+1, stdin);
 
-	//file reading works, test token functionality:
+	//read Database into a string:
 	fgets(fileStr, 200, memsIn);
 	printf("%s\n", fileStr);
 	strcpy(fileStr2, fileStr);
-	token = strtok(fileStr, s);
-	printf("strtok successful\n");
 
+	//initalise tokens
+	wToken = strtok(webStr, a);
+	fToken = strtok(fileStr, s); //starts at name, key counts will occur at 1 & 2
+	fToken = strtok(NULL, s); // bump token to username
+	
+	//now walk through POST data
+	 while(wToken != NULL){
 
-	 while(token != NULL){
-	 	printf("%s\n", token );
-	 	token = strtok(NULL, s);
+	 	printf("%s\n", wToken );
+	 	wToken = strtok(NULL, s);
+	 	fTokenCounter++;
 	 }
 
 
 
-	//now tokenise webStr and pull out username and password
+	//now fTokenise webStr and pull out username and password
 
 fclose(memsIn);
 
