@@ -8,7 +8,8 @@
 #define FALSE 0
 
 int main(){
-	
+	printf("testing seg\n");
+	fflush(stdout);
 	char webStr[200]; //for storing our input from the browser
 	char webStr2[200];
 	char fileStr[200];
@@ -29,6 +30,7 @@ int main(){
 	int fTokenCounter = 1; //since we bump the token before we enter the loop
 	int wTokenCounter = 0;
 
+	
 	//first read STDIN input into a string
 	fgets(webStr, parseLength+1, stdin);
 
@@ -42,10 +44,12 @@ int main(){
 	 	printf("%s\n", wToken );
 	 	if(wTokenCounter == 0) //some value to be determined
 	 	{
+	 		printf("%s\n", wToken);
 	 		strcpy(user, wToken);
 	 	}
 	 	if(wTokenCounter == 1) // another tbd value
 	 	{
+	 		printf("%s\n", wToken);
 	 		strcpy(pass, wToken);
 	 	}
 	 	wToken = strtok(NULL, space);
@@ -54,14 +58,15 @@ int main(){
 
 
 	 //check with Database to validate
-	 while((fgets(fileStr, 200, memsIn)) != NULL && validPass == FALSE){
+	 while((fgets(fileStr, 200, memsIn)) != NULL){
 
 		
-		printf("%s\n", fileStr);
+		printf("%s", fileStr);
 		fToken = strtok(fileStr, space); //starts at name, key counts will occur at 1 & 2
 		fToken = strtok(NULL, space); // bump token to username
 
 		while(fToken != NULL && validPass == FALSE){
+			printf("%s\n", fToken);
 			if(strcmp(user, fToken) == 0){
 				validMem = TRUE;
 
@@ -69,11 +74,20 @@ int main(){
 			else if(strcmp(pass, fToken) == 0 && validMem == TRUE){
 				validPass = TRUE;
 			}
-			
-			strtok(NULL, space);
+			fToken = strtok(NULL, space);
 		}
 	 }
 
+	 //Generate webpages
+	 printf("Content-Type:text/html\n\n");
+	 if(validPass == TRUE){
+	 	printf("<html><head><title>Login Successful! Follow the below link</title></head>\n");
+	 	printf("<body> <a href="cs.mcgill.ca/~jsteel15">Topic Updates</a></body>\n");
+	 	printf("<html>\n");
+	 }
+	 else{
+
+	 }
 
 
 fclose(memsIn);
