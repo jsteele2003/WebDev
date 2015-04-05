@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define TRUE 1
+#define FALSE 0
 
 int main(){
 	
@@ -14,14 +16,14 @@ int main(){
 	char user[10]; // will preserve key tokens
 	char pass[10];
 	char space[2] = " ";
-	char *delimiters = "&=";
+	char *delimiters = "&="; //breaks up keys and values
 	
 	int parseLength = atoi(getenv("CONTENT_LENGTH"));
 	FILE *memsIn;
 	memsIn = fopen("members.txt", "r");
 	
-	int validMem = -1;
-	int validPass = - 1;
+	int validMem = FALSE;
+	int validPass = FALSE;
 	char *fToken;
 	char *wToken;
 	int fTokenCounter = 1; //since we bump the token before we enter the loop
@@ -50,34 +52,29 @@ int main(){
 	 	wTokenCounter++;
 	 }
 
-	 //check with Database and generate web pages
-	 while(1){
-	 	//read Database into a string:
-		if(fgets(fileStr, 200, memsIn) == NULL) break;
+
+	 //check with Database to validate
+	 while((fgets(fileStr, 200, memsIn)) != NULL && validPass == FALSE){
+
 		
 		printf("%s\n", fileStr);
 		fToken = strtok(fileStr, space); //starts at name, key counts will occur at 1 & 2
 		fToken = strtok(NULL, space); // bump token to username
 
-		while(fToken != NULL){
-			if(strcmp(user, fToken) == 1){
-				validMem = 1;
+		while(fToken != NULL && validPass == FALSE){
+			if(strcmp(user, fToken) == 0){
+				validMem = TRUE;
 
 			}
-			else if(strcmp(pass, fToken) == 1 && validMem == 1){
-				validPass = 1;
-				break;
+			else if(strcmp(pass, fToken) == 0 && validMem == TRUE){
+				validPass = TRUE;
 			}
-			else{
-
-			}
+			
+			strtok(NULL, space);
 		}
 	 }
 
 
-
-
-	//now fTokenise webStr and pull out username and password
 
 fclose(memsIn);
 
