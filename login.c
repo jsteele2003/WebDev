@@ -10,16 +10,16 @@
 int main(){
 	printf("testing seg\n");
 	fflush(stdout);
-	char webStr[200]; //for storing our input from the browser
+	char webStr[200] = "Name=Jonathan+Doe&Age=23&Formula=a+%2B+b+%3D%3D+13%25%21"; //for storing our input from the browser
 	char webStr2[200];
 	char fileStr[200];
 	char fileStr2[200];
 	char user[10]; // will preserve key tokens
 	char pass[10];
 	char space[2] = " ";
-	char *delimiters = "&="; //breaks up keys and values
+	char delimiters[2] = "=&"; //breaks up keys and values
 	
-	int parseLength = atoi(getenv("CONTENT_LENGTH"));
+	//int parseLength = atoi(getenv("CONTENT_LENGTH"));
 	FILE *memsIn;
 	memsIn = fopen("members.txt", "r");
 	
@@ -27,12 +27,11 @@ int main(){
 	int validPass = FALSE;
 	char *fToken;
 	char *wToken;
-	int fTokenCounter = 1; //since we bump the token before we enter the loop
-	int wTokenCounter = 0;
+	int wTokenKey = 0;
 
 	
 	//first read STDIN input into a string
-	fgets(webStr, parseLength+1, stdin);
+	//fgets(webStr, parseLength+1, stdin);
 
 
 	//initalise token
@@ -42,22 +41,27 @@ int main(){
 	//now walk through POST data for username and password
 	 while(wToken != NULL){
 	 	printf("%s\n", wToken );
-	 	if(wTokenCounter == 0) //some value to be determined
+	 	if(strcmp(wToken, "name:") == 0){
+	 		wTokenKey = 1;
+	 	}
+	 	if(strcmp(wToken, "passwd") == 0){
+	 		wTokenKey = 2;
+	 	}
+	 	if(wTokenKey == 1) //some value to be determined
 	 	{
-	 		printf("%s\n", wToken);
 	 		strcpy(user, wToken);
+	 		wTokenKey = 0;
 	 	}
-	 	if(wTokenCounter == 1) // another tbd value
+	 	if(wTokenKey == 2) // another tbd value
 	 	{
-	 		printf("%s\n", wToken);
 	 		strcpy(pass, wToken);
+	 		wTokenKey = 0;
 	 	}
-	 	wToken = strtok(NULL, space);
-	 	wTokenCounter++;
+	 	wToken = strtok(NULL, delimiters);
 	 }
 
 
-	 //check with Database to validate
+	 //cross reference with Database to validate
 	 while((fgets(fileStr, 200, memsIn)) != NULL){
 
 		
@@ -82,11 +86,13 @@ int main(){
 	 printf("Content-Type:text/html\n\n");
 	 if(validPass == TRUE){
 	 	printf("<html><head><title>Login Successful! Follow the below link</title></head>\n");
-	 	printf("<body> <a href="cs.mcgill.ca/~jsteel15">Topic Updates</a></body>\n");
+	 	printf("<body> <a href=//\"cs.mcgill.ca/~jsteel15\">Topic Updates</a></body>\n");
 	 	printf("<html>\n");
 	 }
 	 else{
-
+	 	printf("<html><head><title>Invalid username or password, follow below link to retry</title></head>\n");
+	 	printf("<body> <a href=//\"cs.mcgill.ca/~jsteel15\">Topic Updates</a></body>\n");
+	 	printf("<html>\n");
 	 }
 
 
