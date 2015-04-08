@@ -10,7 +10,7 @@
 int main(){
 	printf("testing seg\n");
 	fflush(stdout);
-	char webStr[200] = "Name=Jonathan+Doe&Age=23&Formula=a+%2B+b+%3D%3D+13%25%21"; //for storing our input from the browser
+	char webStr[200] = "name=jbob&passwd=abc&Formula=a+%2B+b+%3D%3D+13%25%21"; //for storing our input from the browser
 	char webStr2[200];
 	char fileStr[200];
 	char fileStr2[200];
@@ -41,18 +41,18 @@ int main(){
 	//now walk through POST data for username and password
 	 while(wToken != NULL){
 	 	printf("%s\n", wToken );
-	 	if(strcmp(wToken, "name:") == 0){
+	 	if(strcmp(wToken, "name") == 0){
 	 		wTokenKey = 1;
 	 	}
 	 	if(strcmp(wToken, "passwd") == 0){
 	 		wTokenKey = 2;
 	 	}
-	 	if(wTokenKey == 1) //some value to be determined
+	 	if(wTokenKey == 1 && strcmp(wToken, "name") != 0) //some value to be determined
 	 	{
 	 		strcpy(user, wToken);
 	 		wTokenKey = 0;
 	 	}
-	 	if(wTokenKey == 2) // another tbd value
+	 	if(wTokenKey == 2 && strcmp(wToken, "passwd") != 0) // another tbd value
 	 	{
 	 		strcpy(pass, wToken);
 	 		wTokenKey = 0;
@@ -61,6 +61,8 @@ int main(){
 	 }
 
 
+	 printf("%s\n", user);
+	 printf("%s\n", pass);
 	 //cross reference with Database to validate
 	 while((fgets(fileStr, 200, memsIn)) != NULL){
 
