@@ -8,6 +8,13 @@ $password = param('passwd');
 
 print "Content-type: text/html\n\n";
 
+sub Error
+{
+	print "Content-type: text/html\n\n";
+	print "The server can't $_[0] the $_[1]: $! \n";
+	exit;
+}
+
 open (LOG, "<members.csv") || Error('open','file');
 $existing = 0;
 $line = <LOG>;
