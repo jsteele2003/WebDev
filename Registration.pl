@@ -8,12 +8,11 @@ $password = param('passwd');
 
 print "Content-type: text/html\n\n";
 
-sub main{
 open (LOG, "<members.csv") || Error('open','file');
-my $existing = 0;
-my $line = <LOG>;
+$existing = 0;
+$line = <LOG>;
 while($line = <LOG>){
-	my @data = split(' ', $line);
+	@data = split(' ', $line);
 	if($data[0] eq $name){
 		$existing = 1;
 	}
@@ -23,11 +22,12 @@ if($existing == 0){
 	open (LOG, ">>members.csv") || Error('open','file');
 	print LOG "$name $username $password\n";
 	close(LOG);
-	print "Location: ";
+	print qq(<html><head><title>Congratulations</title></head>);
+	print qq(<body><p>Your registration is successful!</p><nav><a href="http://cgi.cs.mcgill.ca/~tweins2/welcome.html">Go Back To Welcome Page</a></nav></body></html>);
 }
 else{
 	print "Error: Username already exists";
-	print "Location: ";
+	print "Location: http://cgi.cs.mcgill.ca/~tweins2/member.html";
 }
 
-}
+
