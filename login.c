@@ -8,9 +8,8 @@
 #define FALSE 0
 
 int main(){
-	printf("testing seg\n");
 	fflush(stdout);
-	char webStr[200] = "name=jbob&passwd=abc&Formula=a+%2B+b+%3D%3D+13%25%21"; //for storing our input from the browser
+	char webStr[200] = "name=jbob&passwd=ddd&formula=a"; //for storing our input from the browser
 	char webStr2[200];
 	char fileStr[200];
 	char fileStr2[200];
@@ -28,6 +27,7 @@ int main(){
 	char *fToken;
 	char *wToken;
 	int wTokenKey = 0;
+	int fCounter = 0;
 
 	
 	//first read STDIN input into a string
@@ -40,7 +40,6 @@ int main(){
 	
 	//now walk through POST data for username and password
 	 while(wToken != NULL){
-	 	printf("%s\n", wToken );
 	 	if(strcmp(wToken, "name") == 0){
 	 		wTokenKey = 1;
 	 	}
@@ -61,27 +60,25 @@ int main(){
 	 }
 
 
-	 printf("%s\n", user);
-	 printf("%s\n", pass);
+
 	 //cross reference with Database to validate
 	 while((fgets(fileStr, 200, memsIn)) != NULL){
 
 		
-		printf("%s", fileStr);
 		fToken = strtok(fileStr, space); //starts at name, key counts will occur at 1 & 2
-		fToken = strtok(NULL, space); // bump token to username
 
 		while(fToken != NULL && validPass == FALSE){
-			printf("%s\n", fToken);
 			if(strcmp(user, fToken) == 0){
 				validMem = TRUE;
+				fCounter++;
 
 			}
-			else if(strcmp(pass, fToken) == 0 && validMem == TRUE){
+			else if(strcmp(pass, fToken) == 0 && validMem == TRUE && fCounter == 1){
 				validPass = TRUE;
 			}
 			fToken = strtok(NULL, space);
 		}
+		fCounter = 0;
 	 }
 
 	 //Generate webpages
