@@ -1,12 +1,12 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 use strict; 
 use CGI ':standard';
+
+print "Content-type: text/html\r\n\r\n";
 
 my $name = param('fullname');
 my $username = param('username');
 my $password = param('passwd');
-
-print "Content-type: text/html\n\n";
 
 sub Error
 {
@@ -38,4 +38,5 @@ else{
 	print "Already exists";
 }
 
+exit 0;
 
