@@ -2,9 +2,9 @@
 use strict; 
 use CGI ':standard';
 
-$name = param('fullname');
-$username = param('username');
-$password = param('passwd');
+my $name = param('fullname');
+my $username = param('username');
+my $password = param('passwd');
 
 print "Content-type: text/html\n\n";
 
@@ -16,11 +16,11 @@ sub Error
 }
 
 open (LOG, "<members.csv") || Error('open','file');
-$existing = 0;
-$line = <LOG>;
-while($line = <LOG>){
-	@data = split(' ', $line);
-	if($data[0] eq $name){
+my $existing = 0;
+my @lines = <LOG>;
+for(my $i=0; $i<=$#lines; $i++){
+	my @compare = split(' ',$lines[$i]);
+	if($compare[0] eq $name){
 		$existing = 1;
 	}
 }
@@ -35,6 +35,7 @@ if($existing == 0){
 else{
 	print "Error: Username already exists";
 	print "Location: http://cgi.cs.mcgill.ca/~tweins2/member.html";
+	print "Already exists";
 }
 
 
