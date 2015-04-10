@@ -2,7 +2,7 @@
 use strict; 
 use CGI ':standard';
 
-print "Content-type: text/html\r\n\r\n";
+print "Content-type: text/html\n\n";
 
 my $name = param('fullname');
 my $username = param('username');
@@ -20,7 +20,7 @@ my $existing = 0;
 my @lines = <LOG>;
 for(my $i=0; $i<=$#lines; $i++){
 	my @compare = split(' ',$lines[$i]);
-	if($compare[0] eq $name){
+	if($compare[1] eq $name){
 		$existing = 1;
 	}
 }
@@ -35,8 +35,5 @@ if($existing == 0){
 else{
 	print "Error: Username already exists";
 	print "Location: http://cgi.cs.mcgill.ca/~tweins2/member.html";
-	print "Already exists";
 }
-
 exit 0;
-
